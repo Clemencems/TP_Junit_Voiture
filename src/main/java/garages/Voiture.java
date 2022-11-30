@@ -29,6 +29,9 @@ public class Voiture {
 	 */
 	public void entreAuGarage(Garage g) throws Exception {
 		// Et si la voiture est déjà dans un garage ?
+		if(this.estDansUnGarage()) {
+			throw new UnsupportedOperationException("La voiture est déjà dans un garage");
+		}
 
 		Stationnement s = new Stationnement(this, g);
 		myStationnements.add(s);
@@ -41,8 +44,12 @@ public class Voiture {
 	 * @throws java.lang.Exception si la voiture n'est pas dans un garage
 	 */
 	public void sortDuGarage() throws Exception {
-		throw new UnsupportedOperationException("Pas encore implémenté");
-		// TODO: Implémenter cette méthode
+		if(!this.estDansUnGarage()) {
+			throw new UnsupportedOperationException("La voiture n'est pas dans un garage");
+		}
+
+		this.myStationnements.get(this.myStationnements.size() - 1).terminer();
+
 		// Trouver le dernier stationnement de la voiture
 		// Terminer ce stationnement
 	}
@@ -52,7 +59,11 @@ public class Voiture {
 	 */
 	public Set<Garage> garagesVisites() {
 		// TODO: Implémenter cette méthode
-		throw new UnsupportedOperationException("Pas encore implémenté");
+		Set<Garage> myset = new HashSet<>();
+		for (Stationnement myStationnement : myStationnements) {
+			myset.add(myStationnement.getGarage());
+		}
+		return myset;
 	}
 
 	/**
@@ -60,7 +71,13 @@ public class Voiture {
 	 */
 	public boolean estDansUnGarage() {
 		// TODO: Implémenter cette méthode
-		throw new UnsupportedOperationException("Pas encore implémenté");
+		if(myStationnements.size() != 0)
+		{
+			return true;
+		}
+		else {
+			return false;
+		}
 		// Vrai si le dernier stationnement est en cours
 	}
 
@@ -82,7 +99,17 @@ public class Voiture {
 	 */
 	public void imprimeStationnements(PrintStream out) {
 		// TODO: Implémenter cette méthode
-		throw new UnsupportedOperationException("Pas encore implémenté");
+		String impression = "";
+		for(Garage g : this.garagesVisites()) {
+			impression += "\n" + g.toString();
+			for(Stationnement s : this.myStationnements) {
+				if (s.getGarage() == g) {
+					impression += "\n    " + s.toString();
+				}
+			}
+		}
+
+		out.println(impression);
 	}
 
 }
